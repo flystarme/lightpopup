@@ -1,0 +1,764 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+    <title>LightPopup-一个轻量级的前端弹窗组件</title>
+    <link rel="stylesheet" href="/demo/style.css" />
+    <link rel="stylesheet" href="/demo/highlight/atom-one-dark.min.css" />
+    <script src="/demo/highlight/highlight.min.js"></script>
+    <script type="module" src="/src/main.js"></script>
+</head>
+<body>
+    <div class="main">
+        <h1>LightPopup</h1>
+        <div class="version"><a class="ver">v1.1</a></div>
+        <div class="intro">
+            <p>一个轻量级的前端弹窗组件 <a href="/lightpopup/lightpopup.zip?v=1.1" style="font-size:12px">源码下载</a></p>
+            <p><a class="why">为什么我要造“轮子”？</a></p>
+        </div>
+        <div class="nav">
+            <div class="menus">
+                <span data-go="module-Alert">Alert</span>
+                <span data-go="module-Confirm">Confirm</span>
+                <span data-go="module-Prompt">Prompt</span>
+                <span data-go="module-Message">Message</span>
+                <span data-go="module-Hint">Hint</span>
+                <span data-go="module-Loading">Loading</span>
+                <span data-go="module-Global">全局参数/事件</span>
+            </div>
+        </div>
+        <div class="demos"></div>
+        <div class="options">
+            <div class="module" id="module-Global">
+                <h2>全局参数</h2>
+                <div class="table-container">
+                    <table border="1">
+                        <thead>
+                            <tr>
+                                <th width="100">参数名</th>
+                                <th>说明</th>
+                                <th>默认值</th>
+                                <th>数据类型</th>
+                                <th>其他说明</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>title</td><td>标题</td><td>提示</td><td>string,boolean</td><td>传入false将不显示标题栏</td>
+                            </tr>
+                            <tr>
+                            <td>
+                                content</td><td>内容</td><td></td><td>string</td><td></td>
+                            </tr>
+                            <tr>
+                                <td>buttons</td><td>底部按钮</td><td></td><td>array</td><td>见下方buttons参数</td>
+                            </tr>
+                            <tr>
+                                <td>icon</td><td>图标</td><td></td><td>string</td><td></td>
+                            </tr>
+                            <tr>
+                                <td>className</td><td>弹窗类名</td><td></td><td>string</td><td></td>
+                            </tr>
+                            <tr>
+                                <td>useHTML</td><td>title,content使用html代码</td><td>false</td><td>boolean</td><td></td>
+                            </tr>
+                            <tr>
+                                <td>width</td><td>弹窗宽度</td><td></td><td>string</td><td>例如：600px 或 80% 或 auto</td>
+                            </tr>
+                            <tr>
+                                <td>closeOnMaskClick</td><td>点击遮罩关闭弹窗</td><td>false</td><td>boolean</td><td></td>
+                            </tr>
+                            <tr>
+                                <td>maskOpacity</td><td>遮罩透明度</td><td>0.5</td><td>float,number</td><td></td>
+                            </tr>
+                            <tr>
+                                <td>autoClose</td><td>自动关闭</td><td>false</td><td>boolean,number</td><td>单位ms，message,hint默认值为3000</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="module" id="module-Buttons">
+                <h2>buttons参数</h2>
+                <div class="table-container">
+                    <table border="1">
+                        <thead>
+                            <tr>
+                                <th width="100">参数</th>
+                                <th>说明</th>
+                                <th>默认值</th>
+                                <th>数据类型</th>
+                                <th>其他说明</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>text</td><td>按钮名称</td><td></td><td>string</td><td></td>
+                            </tr>
+                            <tr>
+                                <td>type</td><td>按钮样式</td><td>primary</td><td>string</td><td>可选样式：default,primary,error,warning</td>
+                            </tr>
+                            <tr>
+                                <td>onClick</td><td>按钮点击后回调</td><td></td><td>function</td><td>接收参数：popup, [loadingOn, loadingOff]</td>
+                            </tr>
+                            <tr>
+                                <td>className</td><td>按钮类名</td><td></td><td>string,array</td><td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="module" id="module-GlobalEvent">
+                <h2>全局事件</h2>
+                <div class="table-container">
+                    <table border="1">
+                        <thead>
+                            <tr>
+                                <th width="100">事件名</th>
+                                <th>说明</th>
+                                <th>数据类型</th>
+                                <th>其他说明</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>done</td><td>弹窗插入页面</td><td>function</td><td>接收参数：popup(弹窗dom元素)</td>
+                            </tr>
+                            <tr>
+                                <td>close</td><td>弹窗关闭</td><td>function</td><td>接收参数：调用弹窗关闭方法所传入的参数<br>返回值：如果为false则阻止弹窗关闭（hint无法阻止关闭）</td>
+                            </tr>
+                            <tr>
+                                <td>onClose</td><td>点击关闭按钮</td><td>function</td><td>接收参数：popup(弹窗dom元素)<br>返回值：如果为false则阻止弹窗关闭</td>
+                            </tr>
+                            <tr>
+                                <td>onMaskClick</td><td>点击遮罩</td><td>function</td><td>接收参数：popup(弹窗dom元素)<br>返回值：如果为false则阻止弹窗关闭</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="module" id="module-SomeParam">
+                <h2>alert/confirm/prompt参数</h2>
+                <div class="table-container">
+                    <table border="1">
+                        <thead>
+                            <tr>
+                                <th width="100">参数名</th>
+                                <th>说明</th>
+                                <th>默认值</th>
+                                <th>数据类型</th>
+                                <th>其他说明</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>confirmButtonText</td><td>确认按钮名称</td><td>确定</td><td>string</td><td></td>
+                            </tr>
+                            <tr>
+                                <td>confirmButtonType</td><td>确认按钮类型</td><td>primary</td><td>string</td><td>可选样式：default,primary,error,warning</td>
+                            </tr>
+                            <tr>
+                                <td>cancelButtonText</td><td>取消按钮名称</td><td>取消</td><td>string</td><td></td>
+                            </tr>
+                            <tr>
+                                <td>cancelButtonType</td><td>取消按钮类型</td><td>default</td><td>string</td><td>可选样式：default,primary,error,warning</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="module" id="module-SomeEvent">
+                <h2>alert/confirm/prompt事件</h2>
+                <div class="table-container">
+                    <table border="1">
+                        <thead>
+                            <tr>
+                                <th width="100">事件名</th>
+                                <th width="130">说明</th>
+                                <th width="100">数据类型</th>
+                                <th>其他说明</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>onConfirm</td><td>点击确定按钮</td><td>function</td><td>接收参数：popup(弹窗dom元素), [loadingOn, loadingOff](按钮loading状态开启和关闭), value(prompt文本框内容)<br>返回值：如果为false则阻止弹窗关闭</td>
+                            </tr>
+                            <tr>
+                                <td>onCancel</td><td>点击取消按钮</td><td>function</td><td>接收参数：popup(弹窗dom元素), [loadingOn, loadingOff](按钮loading状态开启和关闭)<br>返回值：如果为false则阻止弹窗关闭</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="module" id="module-ReturnValue">
+                <h2>弹窗返回值</h2>
+                <div class="table-container">
+                    <table border="1">
+                        <thead>
+                            <tr>
+                                <th width="100">名称</th>
+                                <th width="130">类型</th>
+                                <th>说明</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>el</td><td>element</td><td>弹窗dom</td>
+                            </tr>
+                            <tr>
+                                <td>close</td><td>function</td><td>弹窗关闭</td>
+                            </tr>
+                            <tr>
+                                <td>animateTime</td><td>number</td><td>弹窗进入或退出的动画时间，单位：ms</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <script>
+        const demosContainer = document.querySelector('.demos')
+        const optionsTbodyContainer = document.querySelector('.options tbody')
+
+        const demo = [
+            {
+                h2: 'Alert',
+                items: [
+                    {
+                        code: `LightPopup.alert('这是一个普通的alert')`,
+                    },
+                    {
+                        code: `LightPopup.alert.success('这是一个成功alert')`,
+                        buttonType: 'success'
+                    },
+                    {
+                        code: `LightPopup.alert.warning('这是一个警告alert')`,
+                        buttonType: 'warning'
+                    },
+                    {
+                        code: `LightPopup.alert.error('这是一个错误alert')`,
+                        buttonType: 'error'
+                    },
+                    {
+                        code: `
+                            LightPopup.alert.success('文本内容', {
+                                title: '操作确认',
+                                onConfirm: () => {
+                                    LightPopup.message('点击了确定按钮')
+                                },
+                            })`,
+                        tips: '“确定”按钮事件回调'
+                    },
+                ]
+            },
+            {
+                h2: 'Confirm',
+                items: [
+                    {
+                        code: `
+                            LightPopup.confirm('文本内容', {
+                                onConfirm: () => {
+                                    LightPopup.message.success('点击了确定按钮')
+                                },
+                                onCancel: () => {
+                                    LightPopup.message.warning('不给点取消，必须点确定')
+                                    return false //阻止关闭
+                                },
+                                onClose: () => {
+                                    LightPopup.message.warning('你要是直接点了关闭，那我就勉强给你关闭吧')
+                                    //return false //这里也可以阻止关闭
+                                }
+                            })`,
+                        tips: '“确定”与“取消”按钮事件回调'
+                    },
+                    {
+                        code: `
+                            LightPopup.confirm('确认删除吗？', {
+                                title: '删除确认',
+                                icon: 'question',
+                                confirmButtonType: 'error',
+                                confirmButtonText: '确认删除',
+                                cancelButtonText: '再想想吧',
+                                onClose: () => {
+                                    LightPopup.message.warning('下面必须二选一')
+                                    return false //阻止关闭
+                                }
+                            })`,
+                        tips: '自定义按钮名称'
+                    },
+                    {
+                        code: `
+                            let isConfirm, isCancel
+                            LightPopup.confirm('确认删除吗？', {
+                                icon: 'question',
+                                confirmButtonType: 'error',
+                                onConfirm: (popup, [on, off]) => {
+                                    on() //启用按钮的loading状态
+                                    isConfirm = true
+                                    setTimeout(() => {
+                                        LightPopup.message.success('删除成功')
+                                        popup.close() //关闭弹窗
+                                    }, 2000)
+                                    return false //阻止弹窗关闭
+                                },
+                                onCancel: (popup, [on, off]) => {
+                                    on() //启用按钮的loading状态
+                                    isCancel = true
+                                    setTimeout(() => {
+                                        LightPopup.message.success('已取消')
+                                        popup.close() //关闭弹窗
+                                    }, 2000)
+                                    return false //阻止弹窗关闭
+                                },
+                                onClose: () => {
+                                    if (isConfirm || isCancel){
+                                        LightPopup.message.warning('进行中，不能关闭')
+                                        return false //阻止关闭
+                                    }
+                                }
+                            })`,
+                        tips: '按钮的loading状态'
+                    },
+                    {
+                        code: `
+                            let isSubmit = false
+                            const {el} = LightPopup.confirm(\`
+                                &lt;form action="">
+                                    &lt;p style="font-size:14px;margin-bottom:10px;">姓名：&lt;/p>&lt;input type="text" name="name" placeholder="请输入" value="张三" class="light-popup-input">
+                                    &lt;p style="font-size:12px;margin-top:10px;color:red;">文本框有内容时不能点击取消和关闭按钮&lt;/p>
+                                &lt;/form>
+                            \`, {
+                                title: '提交表单',
+                                confirmButtonText: '提交',
+                                useHTML: true, //允许使用html代码
+                                onConfirm: (popup) => {
+                                    isSubmit = true
+                                    LightPopup.alert.success('提交成功' + JSON.stringify(Object.fromEntries(new FormData(popup.querySelector('form')).entries())))
+                                    popup.close()
+                                },
+                                close: () => {
+                                    if (!isSubmit && el.querySelector('input').value !== ''){
+                                        LightPopup.alert.warning('您的表单未提交')
+                                        return false //阻止弹窗关闭
+                                    }
+                                }
+                            })`,
+                        tips: '提交表单'
+                    },
+                ]
+            },
+            {
+                h2: 'Prompt',
+                items: [
+                    {
+                        code: `
+                            LightPopup.prompt({
+                                onConfirm: (popup, [on, off], value) => {
+                                    on() //启用按钮的loading状态
+                                    setTimeout(() => {
+                                        LightPopup.alert.success('输入的内容是：' + value)
+                                        popup.close() //关闭弹窗
+                                    }, 1000)
+                                    return false
+                                }
+                            })`,
+                    },
+                    {
+                        code: `
+                            LightPopup.prompt({
+                                inputType: 'password',
+                                inputPlaceholder: '请输入密码',
+                                onConfirm: (popup, [on, off], value) => {
+                                    LightPopup.alert.success('输入的内容是：' + value)
+                                }
+                            })`,
+                        tips: '密码输入框',
+                    },
+                    {
+                        code: `
+                            LightPopup.prompt({
+                                inputValue: '123456',
+                                onConfirm: (popup, [on, off], value) => {
+                                    LightPopup.alert.success('输入的内容是：' + value)
+                                }
+                            })`,
+                        tips: '文本框初始内容',
+                    },
+                    {
+                        code: `
+                            LightPopup.prompt({
+                                autofocus: false,
+                                onConfirm: (popup, [on, off], value) => {
+                                    LightPopup.alert.success('输入的内容是：' + value)
+                                }
+                            })`,
+                        tips: '禁用自动文本框焦点',
+                    },
+                    {
+                        code: `
+                            LightPopup.prompt({
+                                inputRequired: false,
+                                onConfirm: (popup, [on, off], value) => {
+                                    LightPopup.alert.success('输入的内容是：' + value)
+                                }
+                            })`,
+                        tips: '文本框可空',
+                    },
+                ]
+            },
+            {
+                h2: 'Message',
+                items: [
+                    {
+                        code: `LightPopup.message('没有图标的提醒')`,
+                    },
+                    {
+                        code: `LightPopup.message.success('成功消息提醒')`,
+                    },
+                    {
+                        code: `LightPopup.message.warning('警告消息提醒')`,
+                    },
+                    {
+                        code: `
+                            LightPopup.message.error('错误消息提醒', {
+                                autoClose: 1000
+                            })`,
+                        tips: '设置关闭时间，单位毫秒，默认3000ms'
+                    },
+                    {
+                        code: `
+                            const popup = LightPopup.message.loading('加载中... 5秒后关闭', {
+                                autoClose: false
+                            })
+                            setTimeout(() => popup.close(), 5000) //5秒后关闭`,
+                        tips: '一种loading状态'
+                    },
+                    {
+                        code: `
+                            const popup = LightPopup.message('加载中...', {
+                                icon: '&lt;img src="./demo/loading.svg?1" width="20"&gt;',
+                                autoClose: false
+                            })
+                            setTimeout(() => {
+                                popup.close()
+                                LightPopup.hint.success('加载完成')
+                            }, 2000) //2秒后关闭`,
+                        tips: '一种loading状态，自定义图标'
+                    },
+                ]
+            },
+            {
+                h2: 'Hint',
+                items: [
+                    {
+                        code: `LightPopup.hint('无状态的提醒')`,
+                    },
+                    {
+                        code: `LightPopup.hint.success('成功提醒')`,
+                    },
+                    {
+                        code: `LightPopup.hint.warning('警告提醒')`,
+                    },
+                    {
+                        code: `
+                            LightPopup.hint.error('错误消息提醒', {
+                                autoClose: 1000
+                            })`,
+                        tips: '设置关闭时间，单位毫秒，默认3000ms'
+                    },
+                    {
+                        code: `
+                            const popup = LightPopup.hint.loading()
+                            setTimeout(() => {
+                                popup.close()
+                                LightPopup.hint.success('加载完成')
+                            }, 1000) //1秒后关闭`,
+                        tips: '一种loading状态'
+                    },
+                ]
+            },
+            {
+                h2: 'Loading',
+                items: [
+                    {
+                        code: `
+                            const popup = LightPopup.loading()
+                            setTimeout(() => {
+                                popup.close()
+                            }, 3000) //3秒后关闭`,
+                    },
+                    {
+                        code: `
+                            const popup = LightPopup.loading('正在疯狂加载中...')
+                            setTimeout(() => {
+                                popup.close()
+                            }, 3000) //3秒后关闭`,
+                        tips: '自定义提示文字'
+                    },
+                    {
+                        code: `
+                            const popup = LightPopup.loading('正在疯狂加载中...', {
+                                icon: '&lt;img src="./demo/loading.svg" width="50"&gt;'
+                            })
+                            setTimeout(() => {
+                                popup.close()
+                            }, 3000) //3秒后关闭`,
+                        tips: '自定义图标'
+                    },
+                ]
+            },
+            {
+                h2: '其他用法',
+                items: [
+                    {
+                        code: `
+                            LightPopup({
+                                title: '可风网',
+                                width: '800px',
+                                useHTML: true,
+                                content: '&lt;iframe frameborder="0" src="https://kfuu.cn/" width="100%" height="800px"&gt;&lt;/iframe&gt;',
+                                done(popup){
+                                    popup.querySelector('.light-popup-content').style.margin = '0 -15px -15px'
+                                    popup.querySelector('.light-popup-content').style.display = 'flex'
+                                }
+                            })`,
+                        tips: '嵌入页面',
+                    },
+                    {
+                        code: `
+                            LightPopup({
+                                width: '600px',
+                                title: '自定义标题',
+                                content: '自定义内容',
+                                onClose: () => {
+                                    LightPopup.hint('点击了关闭按钮')
+                                },
+                                close: () => {
+                                    LightPopup.hint('窗口已关闭')
+                                },
+                                buttons: [
+                                    {
+                                        text: '默认按钮',
+                                        type: 'default',
+                                        onClick(popup, [on, off]){
+                                            LightPopup.hint('点击了默认按钮')
+                                        }
+                                    },
+                                    {
+                                        text: '成功按钮',
+                                        type: 'success',
+                                        onClick(popup, [on, off]){
+                                            LightPopup.hint.success('点击了成功按钮')
+                                        }
+                                    },
+                                    {
+                                        text: '警告按钮',
+                                        type: 'warning',
+                                        onClick(popup, [on, off]){
+                                            LightPopup.hint.warning('点击了警告按钮')
+                                        }
+                                    },
+                                    {
+                                        text: '错误按钮',
+                                        type: 'error',
+                                        onClick(popup, [on, off]){
+                                            LightPopup.hint.error('点击了错误按钮')
+                                        }
+                                    },
+                                    {
+                                        text: '正常按钮',
+                                        type: 'primary',
+                                        onClick(popup, [on, off]){
+                                            on() //启用按钮的loading状态
+                                            setTimeout(() => {
+                                                LightPopup.hint.success('正常按钮操作成功')
+                                                popup.close() //关闭弹窗
+                                            }, 2000)
+                                            return false //阻止弹窗关闭
+                                        }
+                                    },
+                                ]
+                            })`,
+                        tips: 'alert confirm message hint loading都是封装好的LightPopup',
+                    },
+                ]
+            },
+            {
+                h2: '设置语言',
+                items: [
+                    {
+                        code: `
+                            LightPopup.setLanguage({
+                                close: 'Close',
+                                title: 'Message',
+                                confirm: 'Confirm',
+                                cancel: 'Cancel',
+                                promptPlaceholder: 'Please enter the content'
+                            })
+
+                            LightPopup.alert('This is a message1', {
+                                close(){
+                                    LightPopup.confirm('This is a message2', {
+                                        close(){
+                                            LightPopup.prompt('This is a message3')
+                                        }
+                                    })
+                                }
+                            })`,
+                        tips: '全局语言切换'
+                    },
+                ]
+            }
+        ]
+
+        demo.forEach(value => {
+            const div = document.createElement('div')
+            div.id = `module-${value.h2}`
+            div.className = 'module'
+            div.innerHTML = `<h2>${value.h2}</h2>`
+
+            value.items.forEach(item => {
+                const html = `
+                    <div class="demo-code">
+                        <div class="code">
+                            <pre>
+                                <code class="language-javascript">${item.code.trim().replace(/ {28}/g, '').replace(/  /g, ' ')}</code>
+                            </pre>
+                            <div class="copy">
+                                <button class="light-popup-button light-popup-button-primary">复制代码</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="actions">
+                        <button class="light-popup-button light-popup-button-${item.buttonType || 'primary'} click">测试一下</button>
+                        <div class="tips">${(item.tips || '').replace(/\[(.*?)\]/g, (m, n) => `<b>${n}</b> `)}</div>
+                    </div>
+                `
+
+                const module = document.createElement('div')
+                module.className = 'item'
+                module.innerHTML = html
+                
+                module.querySelector('.click').onclick = () => {
+                    eval(item.code.replace(/&lt;/g, '<').replace(/&gt;/g, '>'))
+                }
+
+                div.appendChild(module)
+            })
+
+            demosContainer.appendChild(div)
+        })
+
+        document.querySelectorAll('pre code').forEach(code => {
+            code.textContent = code.textContent.trim()
+        })
+
+        hljs.highlightAll()
+
+        document.querySelectorAll('.copy button').forEach(button => {
+            button.addEventListener('click', () => {
+                const codeBlock = button.parentElement.previousElementSibling.textContent.trim()
+                const tempTextArea = document.createElement('textarea')
+                tempTextArea.value = codeBlock
+                document.body.appendChild(tempTextArea)
+                tempTextArea.select()
+
+                try {
+                    const successful = document.execCommand('copy');
+                    if (successful){
+                        LightPopup.hint.success("代码已复制")
+                    }else{
+                        throw new Error()
+                    }
+                } catch (err) {
+                    LightPopup.hint.error('复制失败')
+                }
+
+                document.body.removeChild(tempTextArea)
+            })
+        })
+
+        document.querySelectorAll('[data-go]').forEach(span => {
+            span.onclick = () => {
+                const id = span.getAttribute('data-go')
+                const target = document.getElementById(id)
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    })
+                }
+            }
+        })
+
+        window.addEventListener('scroll', () => {
+            document.querySelectorAll('.module').forEach(v => {
+                if (v.offsetTop - window.pageYOffset <= 50){
+                    document.querySelector('.nav .active')?.classList?.remove('active')
+                    document.querySelector(`.nav span[data-go="${v.id}"]`)?.classList?.add('active')
+                }
+            })
+        })
+
+        document.querySelector('.why').onclick = () => {
+            LightPopup.alert(`
+                <div class="overflow-x:auto">
+                    <table border="1">
+                        <tbody>
+                            <tr>
+                                <td style="white-space: nowrap;">原因一</td><td>其他组件库无法阻止弹窗关闭或阻止的方法不方便，本组件可以直接通过return false方式阻止</td>
+                            </tr>
+                            <tr>
+                                <td style="white-space: nowrap;">原因二</td><td>没有操作按钮的loading状态或使用方法不方便，本组件给事件回调函数传入开启和关闭的方法</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p style="margin-top:10px;font-size:12px;color:#999">曾经每次开发项目需要用到弹窗组件时，都是用到哪个就写哪个，写了很多次（你想说为什么不把之前写的拿来用？虽然可以复用之前写的，但往往每次写的弹窗功能不够通用，也不够完善。其次每次新写，都能不断的提高自己的编码能力），于是决定写一个属于自己的弹窗组件库，但是本组件和其他优秀的组件相比还有很多功能上的不足，以后会慢慢改进。</p>
+            `, {
+                title: false,
+                useHTML: true,
+                width: '600px',
+                confirmButtonText: '哦~原来是这样！',
+            })
+        }
+
+        document.querySelector('.ver').onclick = () => {
+            LightPopup({
+                title: '更新记录',
+                useHTML: true,
+                width: '600px',
+                closeOnMaskClick: true,
+                content: `
+                <div class="overflow-x:auto">
+                    <table border="1" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>版本</th><th>更新内容</th><th>更新时间</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1.1</td><td>工程化打包</td><td>2025-04-17</td>
+                            </tr>
+                            <tr>
+                                <td>1.0.2</td><td>修复非中文内容过长超出元素问题</td><td>2025-01-04</td>
+                            </tr>
+                            <tr>
+                                <td>1.0.1</td><td>修复在有些网站上有的样式错位问题</td><td>2024-12-29</td>
+                            </tr>
+                            <tr>
+                                <td>1.0</td><td>第一版本发布</td><td>2024-12-28</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            `
+            })
+        }
+        </script>
+    </div>
+</body>
+</html>

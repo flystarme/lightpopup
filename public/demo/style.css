@@ -1,0 +1,214 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body{
+    --color: #409fff;
+    background-color: #f2f4f6;
+    padding:20px 0;
+}
+
+a{
+    color: var(--color);
+    text-decoration: none;
+    cursor: pointer;
+}
+
+a:hover{
+    text-decoration: underline;
+}
+
+.demos,.options{
+    width: 1000px;
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+h1{
+    font-size: 44px;
+    color: var(--color);
+    letter-spacing: 2px;
+    text-align: center;
+}
+
+h1 span{
+    font-size: 14px;
+}
+
+.version{
+    text-align: center;
+    font-size: 14px;
+    margin-top: 10px;
+    color: #f60;
+}
+
+.intro{
+    text-align: center;
+    margin: 10px 0;
+    padding: 20px ;
+    color: #6a6a6a;
+}
+
+.intro .why{
+    display: inline-block;
+    margin-top: 10px;
+    font-size: 12px;
+}
+
+.nav{
+    position: sticky;
+    top: 0;
+    width: 100%;
+    background-color: #e5e5e5;
+    overflow-x: auto;
+    z-index: 100;
+}
+
+.nav .menus{
+    display: flex;
+    justify-content: center;
+    white-space: nowrap;
+}
+
+.nav .menus span{
+    display: inline-block;
+    padding: 8px 15px;
+    cursor: pointer;
+}
+
+.nav .menus span:not(.active):hover{
+    background-color: #dcdcdc;
+}
+
+.nav span.active{
+    background-color: var(--color);
+    color: #fff;
+}
+
+h2{
+    font-size: 24px;
+    font-weight: 400;
+    color: #444;
+    text-align: center;
+}
+
+.module {
+    padding-top:50px;
+}
+
+.item{
+    display: flex;
+    padding-top: 50px;
+    width: 100%;
+    justify-content: center;
+}
+
+.item pre{
+    display: flex;
+}
+
+.item pre code{
+    flex:1;
+}
+
+.item .demo-code{
+    margin-right: 30px;
+    flex: 0 0 400px;
+    width: 0;
+}
+
+.item .code + .code{
+    margin-top: 20px;
+}
+
+.item .code{
+    position: relative;
+}
+
+.item .code .copy{
+    position: absolute;
+    right: 0;
+    bottom:100%;
+    padding: 0 5px 5px 10px;
+    opacity: 0;
+    pointer-events: none;
+    transition: all .2s;
+}
+
+.item .code .copy button{
+    height: 24px;
+    font-size: 12px;
+    padding: 0 5px;
+}
+
+.item .code:hover .copy{
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.item .actions{
+    flex: 0 0 250px;
+}
+
+.item .actions .tips{
+    margin-top: 20px;
+    font-size: 14px;
+    color:#555;
+}
+
+.item .actions .tips b{
+    color: #007c8c;
+}
+
+.item + h2{
+    margin-top: 100px;
+}
+
+.table-container{
+    overflow-x: auto;
+}
+
+.module table{
+    margin: 30px auto 0;
+    width: 800px;
+}
+
+table{
+    border-collapse: collapse;
+    border: 1px solid #d3d3d3;
+}
+
+table th{
+    color: #666;
+    background-color: #efefef;
+}
+
+table th,table td{
+    padding: 10px;
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+@media (max-width: 768px){
+    .nav .menus {
+        justify-content: flex-start;
+    }
+
+    .item {
+        flex-direction: column;
+    }
+    .item .demo-code {
+        flex: auto;
+        width: 100%;
+    }
+    .item .actions {
+        flex: auto;
+        margin-top: 10px;
+    }
+    .item .actions .tips {
+        margin-top: 10px;
+    }
+}
